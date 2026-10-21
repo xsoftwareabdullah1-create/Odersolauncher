@@ -1,0 +1,45 @@
+name: Import complete ZalithLauncher source
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: import-zalith-source
+  cancel-in-progress: false
+
+jobs:
+  import-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out this repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Download upstream source snapshot
+        run: |
+          git clone --depth 1 --single-branch https://github.com/ZalithLauncher/ZalithLauncher.git /tmp/zalith-source
+          test -f /tmp/zalith-source/LICENSE
+          test -d /tmp/zalith-source/app_pojavlauncher || test -d /tmp/zalith-source/app
+
+      - name: Copy all upstream project files while preserving the import workflow
+        run: |
+          rsync -a --exclude='.git/' /tmp/zalith-source/ "${GITHUB_WORKSPACE}/"
+          git status --short
+
+      - name: Commit the complete source snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to import."
+            exit 0
+          fi
+          git commit -m "Import complete ZalithLauncher source (GPL-3.0)"
+          git push origin HEAD:main
