@@ -25,7 +25,7 @@ jobs:
         run: |
           git clone --depth 1 --single-branch https://github.com/ZalithLauncher/ZalithLauncher.git /tmp/zalith-source
           test -f /tmp/zalith-source/LICENSE
-          test -d /tmp/zalith-source/app_pojavlauncher || test -d /tmp/zalith-source/app
+          test -d /tmp/zalith-source/ZalithLauncher
 
       - name: Copy all upstream project files while preserving the import workflow
         run: |
