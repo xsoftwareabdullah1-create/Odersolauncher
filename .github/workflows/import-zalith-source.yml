@@ -2,6 +2,9 @@ name: Import complete ZalithLauncher source
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/import-zalith-source.yml'
 
 permissions:
   contents: write
