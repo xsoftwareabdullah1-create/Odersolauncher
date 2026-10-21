@@ -69,7 +69,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = nameId
+        applicationId = "com.odersolauncher.android"
         minSdk = 26
         targetSdk = 34
         versionCode = launcherVersionCode
