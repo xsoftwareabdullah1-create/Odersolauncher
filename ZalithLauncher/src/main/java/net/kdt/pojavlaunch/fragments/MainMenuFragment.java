@@ -77,6 +77,26 @@ public class MainMenuFragment extends FragmentWithAnim {
         });
         binding.shareLogsButton.setOnClickListener(v -> ZHTools.shareLogs(requireActivity()));
 
+        // Bedrock is a separate official Android game; never emulate its login or collect credentials here.
+        View bedrockButton = view.findViewById(R.id.bedrock_button);
+        if (bedrockButton != null) {
+            bedrockButton.setOnClickListener(v -> {
+                android.content.pm.PackageManager pm = requireContext().getPackageManager();
+                android.content.Intent launchIntent = pm.getLaunchIntentForPackage("com.mojang.minecraftpe");
+                if (launchIntent != null) {
+                    Toast.makeText(requireContext(),
+                            "Minecraft khulne ke baad Play > Servers mein The Hive ya CubeCraft chuno.",
+                            Toast.LENGTH_LONG).show();
+                    startActivity(launchIntent);
+                } else {
+                    android.content.Intent storeIntent = new android.content.Intent(
+                            android.content.Intent.ACTION_VIEW,
+                            android.net.Uri.parse("https://play.google.com/store/apps/details?id=com.mojang.minecraftpe"));
+                    startActivity(storeIntent);
+                }
+            });
+        }
+
         binding.version.setOnClickListener(v -> {
             if (!isTaskRunning()) {
                 ZHTools.swapFragmentWithAnim(this, VersionsListFragment.class, VersionsListFragment.TAG, null);
